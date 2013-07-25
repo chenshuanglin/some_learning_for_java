@@ -1,4 +1,4 @@
-package webJena;
+package OWLTest;
 
 import java.util.Iterator;
 import java.util.Scanner;
@@ -12,16 +12,19 @@ import com.hp.hpl.jena.ontology.impl.OntologyImpl;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class ListClassAndIndividual {
-	public static void main(String[] args) {
-		String className;
+	private String owlFilePath;                 //owl文件的绝对路径名
+	private String keyWord;                     //要查找的概念
+	public ListClassAndIndividual(String owlFilePath,String keyWord){
+		this.owlFilePath = owlFilePath;
+		this.keyWord = keyWord;
+	}
+	public void listMessage(){
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
-		ontModel.read("file:/home/lin/语义web/本体/university.owl");  //读取当前路径下的文件，加载模型
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("请输入要查找的概念：");
-		className=scanner.nextLine();
+		ontModel.read("file:"+owlFilePath);  //读取当前路径下的文件，加载模型
+		
 		for(Iterator it = ontModel.listClasses();it.hasNext();){
 			OntClass ontClass = (OntClass)it.next();
-			if(ontClass.getLocalName() != null && ontClass.getLocalName().equals(className)){   //判断是否是同一个类
+			if(ontClass.getLocalName() != null && ontClass.getLocalName().equals(keyWord)){   //判断是否是同一个类
 				//显示当前类的名称
 				System.out.print("class: ");
 				//获取累的URI并输出，在输出时对URI做了简化（将命名空间前缀省略）
@@ -72,8 +75,7 @@ public class ListClassAndIndividual {
 				}
 			}
 		}
-		//迭代显示模型中的类，在迭代过程中完成各种操作
-		
-		
+	
 	}
+	
 }
